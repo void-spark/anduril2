@@ -178,7 +178,7 @@
 #define USE_AUTOLOCK
 
 // enable momentary mode
-#define USE_MOMENTARY_MODE
+#undef USE_MOMENTARY_MODE
 
 
 // enable a shortcut for +10 in number entry mode
