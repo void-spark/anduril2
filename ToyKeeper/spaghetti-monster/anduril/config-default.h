@@ -178,7 +178,7 @@
 #define USE_AUTOLOCK
 
 // enable momentary mode
-#define USE_MOMENTARY_MODE
+#undef USE_MOMENTARY_MODE
 
 // enable tactical mode
 #define USE_TACTICAL_MODE
