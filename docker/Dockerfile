@@ -17,6 +17,7 @@ RUN apt-get update -qq \
     make \
     perl \
     python-is-python3 \
+    sudo \
     unzip \
     less \
 && rm -rf /var/lib/apt/lists/*

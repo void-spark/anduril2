@@ -21,12 +21,4 @@ RUN pacman -Sy \
     python \
     unzip
 
-RUN curl http://packs.download.atmel.com/Atmel.ATtiny_DFP.2.0.368.atpack > Atmel.ATtiny_DFP.2.0.368.atpack \
-&& mkdir /opt/dfp \
-&& unzip -o Atmel.ATtiny_DFP.2.0.368.atpack -d /opt/dfp \
-&& chmod -R 777 /opt/dfp \
-&& rm Atmel.ATtiny_DFP.2.0.368.atpack
-
-ENV ATTINY_DFP="/opt/dfp"
-
 CMD [ "/bin/bash" ]
