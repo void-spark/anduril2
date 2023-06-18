@@ -181,7 +181,7 @@
 #undef USE_MOMENTARY_MODE
 
 // enable tactical mode
-#define USE_TACTICAL_MODE
+#undef USE_TACTICAL_MODE
 
 
 // enable a shortcut for +10 in number entry mode
