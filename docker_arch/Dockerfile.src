@@ -1,0 +1,44 @@
+# Anything that may be used for building, but is also needed in the final image
+FROM archlinux:latest AS base
+
+# Update base system
+RUN pacman -Sy \
+&& pacman -Su --noconfirm \
+&& find /var/cache/pacman/ -type f -delete
+
+# Install basic dependencies
+RUN pacman -S --noconfirm \
+    avr-binutils \
+    avr-gcc \
+    avr-gdb \
+    avrdude \
+    bison \
+    byacc \
+    curl \
+    flex \
+    git \
+    gcc \
+    glibc \
+    libusb \
+    make \
+    perl \
+    python \
+    unzip \
+&& find /var/cache/pacman/ -type f -delete
+
+# Install extras to build avr-libc
+RUN pacman -Sy --needed --noconfirm \
+    base-devel \
+&& find /var/cache/pacman/ -type f -delete
+
+# Build and iunstall latest avr-libc
+RUN git clone https://github.com/avrdudes/avr-libc.git \
+&& cd avr-libc \
+&& ./bootstrap \
+&& ./configure --build=$(./config.guess) --host=avr --prefix=/usr \
+&& make -j$(nproc) \
+&& make install \
+&& cd .. \
+&& rm -rf avr-libc
+
+CMD [ "/bin/bash" ]

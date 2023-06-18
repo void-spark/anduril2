@@ -1,0 +1,42 @@
+name: CI
+on:
+  push:
+  pull_request:
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - run: >
+        sudo apt-get install --no-install-recommends -y -q
+        perl
+        flex
+        byacc
+        bison
+        curl
+        unzip
+        gcc
+        libusb-dev
+        libc6-dev
+        gcc-avr
+        avr-libc
+        binutils-avr
+        avrdude
+        avrdude-doc 
+        && curl http://packs.download.atmel.com/Atmel.ATtiny_DFP.2.0.368.atpack > Atmel.ATtiny_DFP.2.0.368.atpack
+        && mkdir dfp
+        && unzip -o Atmel.ATtiny_DFP.2.0.368.atpack -d dfp
+        && export ATTINY_DFP=${{ github.workspace }}/dfp
+        && cd ToyKeeper/spaghetti-monster/anduril
+        && ./build-all.sh
+
+    - uses: actions/upload-artifact@v3
+      with:
+        name: hexfiles
+        path: ${{ github.workspace }}/ToyKeeper/spaghetti-monster/anduril/*.hex

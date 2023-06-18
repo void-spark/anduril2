@@ -238,7 +238,9 @@ uint8_t off_state(Event event, uint16_t arg) {
         return MISCHIEF_MANAGED;
     }
 
-    ////////// Every action below here is blocked in the simple UI //////////
+    // Extended Simple UI adds Aux Config and Strobe Modes, so do this code later
+    #ifndef USE_EXTENDED_SIMPLE_UI  
+    ////////// Every action below here is blocked in the (non-Extended) Simple UI //////////
     if (simple_ui_active) {
         return EVENT_NOT_HANDLED;
     }
@@ -249,6 +251,7 @@ uint8_t off_state(Event event, uint16_t arg) {
         save_config();
         return MISCHIEF_MANAGED;
     }
+    #endif // USE_EXTENDED_SIMPLE_UI
     #endif
 
     // click, click, long-click: strobe mode
@@ -260,22 +263,6 @@ uint8_t off_state(Event event, uint16_t arg) {
     #elif defined(USE_BORING_STROBE_STATE)
     else if (event == EV_click3_hold) {
         set_state(boring_strobe_state, 0);
-        return MISCHIEF_MANAGED;
-    }
-    #endif
-    #ifdef USE_MOMENTARY_MODE
-    // 5 clicks: momentary mode
-    else if (event == EV_5clicks) {
-        blink_once();
-        set_state(momentary_state, 0);
-        return MISCHIEF_MANAGED;
-    }
-    #endif
-    #ifdef USE_TACTICAL_MODE
-    // 6 clicks: tactical mode
-    else if (event == EV_6clicks) {
-        blink_once();
-        set_state(tactical_state, 0);
         return MISCHIEF_MANAGED;
     }
     #endif
@@ -327,6 +314,37 @@ uint8_t off_state(Event event, uint16_t arg) {
     }
     #endif  // end 7 clicks
 
+    #if defined(USE_EXTENDED_SIMPLE_UI) && defined(USE_SIMPLE_UI)
+    ////////// Every action below here is blocked in the Extended Simple UI //////////
+    if (simple_ui_active) {
+        return EVENT_NOT_HANDLED;
+    }
+    // 10 clicks: enable simple UI
+    else if (event == EV_10clicks) {
+        blink_once();
+        simple_ui_active = 1;
+        save_config();
+        return MISCHIEF_MANAGED;
+    }
+    #endif // USE_EXTENDED_SIMPLE_UI
+
+
+    #ifdef USE_MOMENTARY_MODE
+    // 5 clicks: momentary mode
+    else if (event == EV_5clicks) {
+        blink_once();
+        set_state(momentary_state, 0);
+        return MISCHIEF_MANAGED;
+    }
+    #endif
+    #ifdef USE_TACTICAL_MODE
+    // 6 clicks: tactical mode
+    else if (event == EV_6clicks) {
+        blink_once();
+        set_state(tactical_state, 0);
+        return MISCHIEF_MANAGED;
+    }
+    #endif 
     #ifdef USE_GLOBALS_CONFIG
     // 9 clicks, but hold last click: configure misc global settings
     else if ((event == EV_click9_hold) && (!arg)) {
@@ -339,4 +357,3 @@ uint8_t off_state(Event event, uint16_t arg) {
 
 
 #endif
-
