@@ -95,6 +95,11 @@ void load_config() {
         #ifdef USE_AUTOLOCK
         autolock_time = eeprom[autolock_time_e];
         #endif
+        #ifdef USE_TACTICAL_MODE
+        tactical_levels[0] = eeprom[tactical_lvl_1_e];
+        tactical_levels[1] = eeprom[tactical_lvl_2_e];
+        tactical_levels[2] = eeprom[tactical_lvl_3_e];
+        #endif
         #ifdef USE_OUTPUT_MUX
         output_mux = eeprom[output_mux_e];
         #endif
@@ -176,6 +181,11 @@ void save_config() {
     #endif
     #ifdef USE_AUTOLOCK
     eeprom[autolock_time_e] = autolock_time;
+    #endif
+    #ifdef USE_TACTICAL_MODE
+    eeprom[tactical_lvl_1_e] = tactical_levels[0];
+    eeprom[tactical_lvl_2_e] = tactical_levels[1];
+    eeprom[tactical_lvl_3_e] = tactical_levels[2];
     #endif
     #ifdef USE_OUTPUT_MUX
     eeprom[output_mux_e] = output_mux;
